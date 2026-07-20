@@ -1,0 +1,34 @@
+scalar DateTime
+
+"""
+Базовые корневые типы. Реальные поля добавляются через extend в файлах доменов.
+"""
+type Query {
+  _health: Boolean!
+}
+
+type Mutation {
+  _noop: Boolean!
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum GenderPref {
+  MALE
+  FEMALE
+  EVERYONE
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}

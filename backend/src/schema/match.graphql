@@ -1,0 +1,40 @@
+"""
+Направленное действие: A лайкнул B. Однонаправленно.
+"""
+type Like {
+  id: ID!
+  toProfile: Profile!
+  createdAt: DateTime!
+}
+
+"""
+Факт взаимности. Создаётся системой в момент встречного лайка, не действием пользователя.
+"""
+type Match {
+  id: ID!
+  """
+  Анкета второго участника (свою и так знаем)
+  """
+  profile: Profile!
+  createdAt: DateTime!
+}
+
+"""
+Результат лайка: match заполнен только если лайк оказался взаимным
+"""
+type LikeResult {
+  like: Like!
+  match: Match
+}
+
+extend type Query {
+  """
+  Мои матчи, свежие сверху
+  """
+  matches: [Match!]!
+}
+
+extend type Mutation {
+  likeUser(toUserId: ID!): LikeResult!
+  dislikeUser(toUserId: ID!): Boolean!
+}

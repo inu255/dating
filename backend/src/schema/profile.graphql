@@ -1,0 +1,84 @@
+"""
+Анкета: публичное представление пользователя. То, что видят другие в ленте.
+"""
+type Profile {
+  id: ID!
+  displayName: String!
+  birthDate: DateTime!
+  """
+  Вычисляется на лету из birthDate
+  """
+  age: Int!
+  gender: Gender!
+  bio: String
+  photos: [Photo!]!
+  interests: [Interest!]!
+}
+
+type Photo {
+  id: ID!
+  url: String!
+  type: MediaType!
+  position: Int!
+}
+
+"""
+Кого я хочу видеть в ленте. Используется алгоритмом подбора, другим не показывается.
+"""
+type Preference {
+  id: ID!
+  genderPref: GenderPref!
+  ageMin: Int!
+  ageMax: Int!
+}
+
+type Interest {
+  id: ID!
+  name: String!
+}
+
+type ProfileEdge {
+  cursor: String!
+  node: Profile!
+}
+
+type ProfileConnection {
+  edges: [ProfileEdge!]!
+  pageInfo: PageInfo!
+}
+
+input UpdateProfileInput {
+  displayName: String
+  bio: String
+  interestIds: [ID!]
+}
+
+input UpdatePreferenceInput {
+  genderPref: GenderPref
+  ageMin: Int
+  ageMax: Int
+}
+
+extend type Query {
+  """
+  Лента анкет для текущего пользователя, курсорная пагинация
+  """
+  feed(first: Int = 10, after: String): ProfileConnection!
+
+  profile(id: ID!): Profile
+
+  """
+  Мои настройки подбора
+  """
+  myPreference: Preference!
+
+  """
+  Справочник интересов для анкеты
+  """
+  interests: [Interest!]!
+}
+
+extend type Mutation {
+  updateProfile(input: UpdateProfileInput!): Profile!
+  updatePreference(input: UpdatePreferenceInput!): Preference!
+}

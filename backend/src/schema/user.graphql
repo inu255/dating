@@ -1,0 +1,16 @@
+"""
+Аккаунт: идентичность в системе. Приватные данные, видит только владелец.
+"""
+type User {
+  id: ID!
+  email: String!
+  createdAt: DateTime!
+  profile: Profile!
+}
+
+extend type Query {
+  """
+  Текущий авторизованный пользователь
+  """
+  me: User!
+}
