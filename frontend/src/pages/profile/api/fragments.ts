@@ -6,6 +6,8 @@ export const ProfileFields = graphql(`
     displayName
     birthDate
     age
+    gender
+    relationshipStatus
     city
     photos {
       id

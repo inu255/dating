@@ -10,6 +10,7 @@ type Profile {
   """
   age: Int!
   gender: Gender!
+  relationshipStatus: RelationshipStatus
   bio: String
   city: String
   photos: [Photo!]!
@@ -51,6 +52,8 @@ type ProfileConnection {
 input UpdateProfileInput {
   displayName: String
   birthDate: DateTime
+  gender: Gender
+  relationshipStatus: RelationshipStatus
   bio: String
   city: String
   interestIds: [ID!]

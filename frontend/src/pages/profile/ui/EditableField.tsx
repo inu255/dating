@@ -55,12 +55,21 @@ export function EditableField({ label, value, inputType = 'text', onSave }: Edit
           <DrawerTitle>{label}</DrawerTitle>
         </DrawerHeader>
         <div className="px-4 pb-4">
-          <Input type={inputType} value={draft} onChange={(e) => setDraft(e.target.value)} />
+          <Input
+            type={inputType}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            className="h-9"
+          />
         </div>
         <DrawerFooter>
-          <Button onClick={handleSave}>Сохранить</Button>
+          <Button size="lg" onClick={handleSave}>
+            Сохранить
+          </Button>
           <DrawerClose asChild>
-            <Button variant="outline">Отмена</Button>
+            <Button size="lg" variant="outline">
+              Отмена
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

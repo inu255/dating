@@ -1,4 +1,5 @@
-import { Plus } from 'lucide-react';
+import { AddPhotoCard } from './AddPhotoCard';
+import { DeletePhotoAction } from './DeletePhotoAction';
 
 const MAX_PHOTOS = 9;
 
@@ -22,16 +23,12 @@ export function PhotoGrid({ photos }: PhotoGridProps) {
       </div>
       <div className="grid grid-cols-3 gap-2">
         {photos.map((photo) => (
-          <div key={photo.id} className="aspect-3/4 overflow-hidden rounded-2xl bg-muted">
+          <div key={photo.id} className="relative aspect-3/4 overflow-hidden rounded-2xl bg-muted">
             <img src={photo.url} alt="" className="size-full object-cover" />
+            <DeletePhotoAction />
           </div>
         ))}
-        <button
-          type="button"
-          className="flex aspect-3/4 items-center justify-center rounded-2xl border border-dashed border-input bg-muted text-muted-foreground"
-        >
-          <Plus />
-        </button>
+        <AddPhotoCard />
       </div>
     </div>
   );

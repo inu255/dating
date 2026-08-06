@@ -76,6 +76,8 @@ export const mocks: IMocks = {
 type UpdateProfileInputArgs = Partial<{
   displayName: string;
   birthDate: string;
+  gender: string;
+  relationshipStatus: string;
   bio: string;
   city: string;
   interestIds: string[];

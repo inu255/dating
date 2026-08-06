@@ -28,6 +28,15 @@ enum MediaType {
   VIDEO
 }
 
+enum RelationshipStatus {
+  SINGLE
+  IN_RELATIONSHIP
+  MARRIED
+  OPEN_RELATIONSHIP
+  COMPLICATED
+  ACTIVELY_LOOKING
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   endCursor: String
