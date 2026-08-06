@@ -11,6 +11,7 @@ type Profile {
   age: Int!
   gender: Gender!
   bio: String
+  city: String
   photos: [Photo!]!
   interests: [Interest!]!
 }
@@ -49,7 +50,9 @@ type ProfileConnection {
 
 input UpdateProfileInput {
   displayName: String
+  birthDate: DateTime
   bio: String
+  city: String
   interestIds: [ID!]
 }
 

@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --content-width: 430px;
+
   --background: oklch(1 0 0);
 
   --foreground: oklch(0.145 0 0);

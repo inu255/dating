@@ -9,6 +9,9 @@ const config: CodegenConfig = {
       preset: 'client',
       config: {
         useTypeImports: true,
+        scalars: {
+          DateTime: '../scalars#DateTimeString',
+        },
       },
     },
   },

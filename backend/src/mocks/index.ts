@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import type { IMocks } from '@graphql-tools/mock';
+import type { IMocks, IMockStore, Ref } from '@graphql-tools/mock';
 
 
 function randomBirthDate(): Date {
@@ -22,6 +22,7 @@ export const mocks: IMocks = {
       birthDate,
       age: ageFromBirthDate(birthDate),
       bio: faker.helpers.maybe(() => faker.person.bio(), { probability: 0.8 }),
+      city: faker.location.city(),
     };
   },
 
@@ -71,3 +72,42 @@ export const mocks: IMocks = {
     }),
   }),
 };
+
+type UpdateProfileInputArgs = Partial<{
+  displayName: string;
+  birthDate: string;
+  bio: string;
+  city: string;
+  interestIds: string[];
+}>;
+
+/**
+ * Резолверы, которым нужен доступ к MockStore напрямую — чтобы мутация
+ * реально меняла ту же сущность, что отдаёт Query.me, а не просто
+ * возвращала случайно сгенерированный Profile (как обычный авто-мок).
+ */
+export function createMutationResolvers(store: IMockStore) {
+  return {
+    Mutation: {
+      updateProfile: (_parent: unknown, args: { input: UpdateProfileInputArgs }) => {
+        const meRef = store.get('Query', 'ROOT', 'me') as Ref;
+        const profileRef = store.get(meRef, 'profile') as Ref;
+        const { birthDate, ...rest } = args.input;
+
+        for (const [field, value] of Object.entries(rest)) {
+          if (value != null) {
+            store.set(profileRef, field, value);
+          }
+        }
+
+        if (birthDate) {
+          const parsedBirthDate = new Date(birthDate);
+          store.set(profileRef, 'birthDate', parsedBirthDate);
+          store.set(profileRef, 'age', ageFromBirthDate(parsedBirthDate));
+        }
+
+        return profileRef;
+      },
+    },
+  };
+}
