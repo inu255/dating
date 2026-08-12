@@ -3,8 +3,11 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { useFragment } from '@/shared/api/generated';
 import type { Gender, RelationshipStatus } from '@/shared/api/generated/graphql';
 import type { DateTimeString } from '@/shared/api/scalars';
+import { ErrorState } from '@/shared/ui/error-state';
+import { LoadingState } from '@/shared/ui/loading-state';
 
-import { ProfileFields } from '../api/fragments';
+import { ProfileFields } from '@/entities/profile/api/fragments';
+
 import { UpdateProfile } from '../api/mutations';
 import { GetMyProfile } from '../api/queries';
 import { EditableField } from './EditableField';
@@ -40,8 +43,8 @@ export function ProfilePage() {
   const [updateProfile] = useMutation(UpdateProfile);
   const profile = useFragment(ProfileFields, data?.me.profile);
 
-  if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>Ошибка: {error.message}</p>;
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState message={error.message} />;
   if (!profile) return null;
 
   const sortedPhotos = profile.photos.toSorted((a, b) => a.position - b.position);
