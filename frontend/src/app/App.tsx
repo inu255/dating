@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import { apolloClient } from '@/shared/api/apollo-client';
 import { ProfilePage } from '@/pages/profile';
 import { FeedPage } from '@/pages/feed';
+import { UserProfilePage } from '@/pages/user-profile';
 import { AppLayout } from './layout/AppLayout';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:id" element={<UserProfilePage />} />
             <Route path="/" element={<FeedPage />} />
           </Route>
         </Routes>

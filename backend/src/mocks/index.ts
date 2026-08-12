@@ -84,12 +84,16 @@ type UpdateProfileInputArgs = Partial<{
 }>;
 
 /**
- * Резолверы, которым нужен доступ к MockStore напрямую — чтобы мутация
- * реально меняла ту же сущность, что отдаёт Query.me, а не просто
- * возвращала случайно сгенерированный Profile (как обычный авто-мок).
+ * Резолверы, которым нужен доступ к MockStore напрямую — чтобы мутация/запрос
+ * реально работали с той же сущностью, что уже закэширована в сторе (например,
+ * анкета, которую store сгенерировал для ленты), а не просто возвращали
+ * случайно сгенерированный Profile при каждом вызове (как обычный авто-мок).
  */
-export function createMutationResolvers(store: IMockStore) {
+export function createStatefulResolvers(store: IMockStore) {
   return {
+    Query: {
+      profile: (_parent: unknown, args: { id: string }) => store.get('Profile', args.id),
+    },
     Mutation: {
       updateProfile: (_parent: unknown, args: { input: UpdateProfileInputArgs }) => {
         const meRef = store.get('Query', 'ROOT', 'me') as Ref;

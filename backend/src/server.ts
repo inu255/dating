@@ -7,7 +7,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 
-import { mocks, createMutationResolvers } from './mocks/index.js';
+import { mocks, createStatefulResolvers } from './mocks/index.js';
 
 const PORT = Number(process.env.PORT ?? 4000);
 
@@ -35,7 +35,7 @@ const mockedSchema = addMocksToSchema({
   schema,
   mocks,
   preserveResolvers: true,
-  resolvers: (store) => createMutationResolvers(store),
+  resolvers: (store) => createStatefulResolvers(store),
 });
 
 const server = new ApolloServer({ schema: mockedSchema });

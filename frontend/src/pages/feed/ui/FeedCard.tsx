@@ -1,6 +1,8 @@
-import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { ProfileFields } from '@/entities/profile/api/fragments';
+import { useDoubleTapLike } from '@/features/like-user/model/useDoubleTapLike';
+import { shareProfile } from '@/features/share-profile/lib/shareProfile';
 import { type FragmentType, useFragment } from '@/shared/api/generated';
 import { ProfileCard } from '@/widgets/profile-card';
 
@@ -9,34 +11,14 @@ type FeedCardProps = {
   onLike: (profileId: string) => void;
 };
 
-const DOUBLE_TAP_DELAY_MS = 300;
-
 export function FeedCard({ profile: profileRef, onLike }: FeedCardProps) {
   const profile = useFragment(ProfileFields, profileRef);
-  const [liked, setLiked] = useState(false);
-  const lastTapRef = useRef(0);
-  const singleTapTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const navigate = useNavigate();
 
-  const handleLike = () => {
-    setLiked(true);
-    onLike(profile.id);
-  };
-
-  const handleTap = () => {
-    const now = Date.now();
-    const sinceLastTap = now - lastTapRef.current;
-
-    if (sinceLastTap > 0 && sinceLastTap < DOUBLE_TAP_DELAY_MS) {
-      clearTimeout(singleTapTimeoutRef.current);
-      lastTapRef.current = 0;
-      handleLike();
-    } else {
-      lastTapRef.current = now;
-      singleTapTimeoutRef.current = setTimeout(() => {
-        // TODO: открыть профиль пользователя (отдельный экран, делаем позже)
-      }, DOUBLE_TAP_DELAY_MS);
-    }
-  };
+  const { liked, handleLike, handleTap } = useDoubleTapLike({
+    onLike: () => onLike(profile.id),
+    onSingleTap: () => navigate(`/profile/${profile.id}`),
+  });
 
   return (
     <ProfileCard
@@ -47,9 +29,7 @@ export function FeedCard({ profile: profileRef, onLike }: FeedCardProps) {
       onMessage={() => {
         // TODO: открыть переписку
       }}
-      onShare={() => {
-        // TODO: поделиться анкетой
-      }}
+      onShare={() => shareProfile(profile.id, profile.displayName)}
     />
   );
 }
